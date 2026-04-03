@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <Title>Bridge</Title>
+</head>
+<body>
+    <img id ="video" width = "400">
+    <button onclick ="startCamera()">Start</button>
+    <button onclick ="stopCamera()">Stop</button>
+
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script>
+    let bridge;
+    new QWebChannel(qt.webChannelTransport, function(channel){
+        bridge = channel.objects.bridge;
+        console.log("Bridge Connected")
+        bridge.frame_signal.connect(function(img){
+            document.getElementById("video").src = "data:image/jpeg;base64," + img;
+            let image = document.createElement("img");
+            image.width = 100;
+            document.getElementById("video").appendChild(image)
+        });
+    });
+    function startCamera(){
+        bridge.startCamera()
+    }
+    function stopCamera(){
+        bridge.stopCamera()
+    }
+
+</script>
+</body>
+</html>
